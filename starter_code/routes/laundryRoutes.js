@@ -106,4 +106,18 @@ router.get('/dashboard', (req, res, next) => {
     });
 });
 
+router.get('/delete/:id', (req, res, next) => {
+console.log(req.params.id)
+  LaundryPickup.findByIdAndRemove(req.params.id).then((pickUp) =>
+   {
+     res.redirect("/laundry/dashboard")
+  }).catch( 
+    
+    () => {
+      res.render("laundry/dashboard",{
+      errorMessage: "WRONG PICKUP ID"})}
+  )
+})
+
+
 module.exports = router;

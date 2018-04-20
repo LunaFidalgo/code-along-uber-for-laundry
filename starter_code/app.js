@@ -40,10 +40,10 @@ app.use(
     secret: "maluca",
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 24 * 2 }, //2 days
+    cookie: { maxAge: 60 * 60 * 24 * 2 * 1000 }, //2 days
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
-      ttl: 24 * 60 * 60 * 2 // 2 day
+      ttl: 24 * 60 * 60 * 2 *1000 // 2 day
     })
   })
 );

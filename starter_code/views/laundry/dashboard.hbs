@@ -1,5 +1,12 @@
 <h2> Your laundry Dashboard </h2>
 
+
+{{#if errorMessage}}
+  <p class="error-message">
+    {{ errorMessage }}
+  </p>
+{{/if}}
+
 <ul>
   <li> <a href="/laundry/launderers"> Find a Launderer </a> </li>
   <li> <a href="/auth/logout"> Log Out </a> </li>
@@ -26,16 +33,23 @@
 {{/if}}
 
 <h3> Pending Pickups </h3>
-
 <ul>
+ {{#if pickups}}
+ 
 {{#each pickups}}
     <li>
       <h4> {{ this.pickupDate }} </h4>
-
       <ul>
         <li> <b>User</b>: {{ this.user.name }} </li>
         <li> <b>Launderer</b>: {{ this.launderer.name }} </li>
+        
       </ul>
     </li>
+     <a href="/laundry/delete/{{this._id}}">CANCEL THIS PICKUP</a>
 {{/each}}
+
+{{else}}
+<p> Not pending pickups</p>
+ {{/if}}
+
 </ul>
