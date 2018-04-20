@@ -84,6 +84,7 @@ const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 
 const laundryRoutes = require("./routes/laundryRoutes");
+
 app.use("/laundry", laundryRoutes);
 
 module.exports = app;
