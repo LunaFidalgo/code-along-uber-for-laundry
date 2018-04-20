@@ -80,44 +80,57 @@ router.post("/laundry-pickups", (req, res, next) => {
   });
 });
 
-router.get('/dashboard', (req, res, next) => {
+router.get("/dashboard", (req, res, next) => {
+  
   let query;
-
   if (req.session.currentUser.isLaunderer) {
     query = { launderer: req.session.currentUser._id };
   } else {
     query = { user: req.session.currentUser._id };
   }
-
-  LaundryPickup
-    .find(query)
-    .populate('user', 'name')
-    .populate('launderer', 'name')
-    .sort('pickupDate')
+  console.log(query);
+  LaundryPickup.find(query)
+    .populate("user", "name")
+    .populate("launderer", "name")
+    .sort("pickupDate")
     .exec((err, pickupDocs) => {
       if (err) {
         next(err);
         return;
       }
 
-      res.render('laundry/dashboard', {
-        pickups: pickupDocs
-      });
+      if (req.session.currentUser.isLaunderer) {
+        query = { user: req.session.currentUser._id };
+
+        LaundryPickup.find(query)
+          .populate("user", "name")
+          .populate("launderer", "name")
+          .sort("pickupDate")
+          .exec((err, pickupDocsLaundry) => {
+            res.render("laundry/dashboard", {
+              pickupDocs,
+              pickupDocsLaundry
+            });
+          });
+      } else {
+        res.render("laundry/dashboard", {
+          pickups: pickupDocs
+        });
+      }
     });
 });
 
-router.get('/delete/:id', (req, res, next) => {
-console.log(req.params.id)
-  LaundryPickup.findByIdAndRemove(req.params.id).then((pickUp) =>
-   {
-     res.redirect("/laundry/dashboard")
-  }).catch( 
-    
-    () => {
-      res.render("laundry/dashboard",{
-      errorMessage: "WRONG PICKUP ID"})}
-  )
-})
-
+router.get("/delete/:id", (req, res, next) => {
+  console.log(req.params.id);
+  LaundryPickup.findByIdAndRemove(req.params.id)
+    .then(pickUp => {
+      res.redirect("/laundry/dashboard");
+    })
+    .catch(() => {
+      res.render("laundry/dashboard", {
+        errorMessage: "WRONG PICKUP ID"
+      });
+    });
+});
 
 module.exports = router;
